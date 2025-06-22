@@ -8,11 +8,20 @@
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "next build",
     "start": "next start",
+    "start:prod": "NODE_ENV=production next start -p 3000",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "ai:test": "tsx src/ai/test-integration.ts",
     "ai:health": "tsx -e \"import { quickHealthCheck } from './src/ai/test-integration'; quickHealthCheck().then(result => process.exit(result ? 0 : 1));\"",
-    "ai:config": "tsx -e \"import { logConfigStatus } from './src/ai/config'; logConfigStatus();\""
+    "ai:config": "tsx -e \"import { logConfigStatus } from './src/ai/config'; logConfigStatus();\"",
+    "deploy:check": "node scripts/deployment-check.js",
+    "deploy:build": "npm run build && npm run typecheck",
+    "deploy:start": "bash scripts/start-production.sh",
+    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop lumios-ai",
+    "pm2:restart": "pm2 restart lumios-ai",
+    "pm2:logs": "pm2 logs lumios-ai",
+    "pm2:monitor": "pm2 monit"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
