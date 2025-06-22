@@ -22,16 +22,11 @@ const AnalysisTypeSchema = z.enum([
 ]);
 export type AnalysisType = z.infer<typeof AnalysisTypeSchema>;
 
-const EnergyImageAnalysisInputSchema = z.object({
-  photoDataUri: z
-    .string()
-    .describe(
-      "A photo for energy analysis, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    ),
-  analysisType: AnalysisTypeSchema.describe("The type of energy analysis to perform on the image."),
-  language: z.enum(['en', 'zh']).optional().describe('The desired language for the AI response (en for English, zh for Chinese). Defaults to English if not provided.')
-});
-export type EnergyImageAnalysisInput = z.infer<typeof EnergyImageAnalysisInputSchema>;
+export type EnergyImageAnalysisInput = {
+  photoDataUri: string;
+  analysisType: AnalysisType;
+  language?: 'en' | 'zh';
+};
 
 const IdentifiedCrystalSchema = z.object({
   name: z.string().describe("Name of the identified crystal."),
@@ -147,11 +142,11 @@ Ensure your response strictly follows the JSON schema provided in the system pro
 
       if (data.identifiedCrystals) {
         data.identifiedCrystals = data.identifiedCrystals.map(crystal => ({
-          ...crystal,
+                        ...crystal,
           name: safeClean(crystal.name),
           details: safeClean(crystal.details),
-        }));
-      }
+                    }));
+                }
 
       if (data.associatedChakras) {
         data.associatedChakras = data.associatedChakras.map(safeClean).filter(Boolean);

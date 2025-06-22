@@ -10,11 +10,9 @@ import { pollinationsService } from '@/ai/pollinations-service';
 import { textModels } from '@/ai/pollinations-config';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import {
-  FullQuestionnaireDataSchema,
   UserProfileDataSchema,
   type FullQuestionnaireDataInput,
   type UserProfileDataOutput,
-  type CrystalReasoningDetails,
 } from '@/ai/schemas/user-profile-schemas';
 
 // This is the main exported function that the application calls.

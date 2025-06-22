@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { test, prompt = '你好，这是一个测试消息。' } = body;
-    
-    return NextResponse.json({
-      status: 'success',
+      
+      return NextResponse.json({
+        status: 'success',
       test: test || 'basic',
-      prompt,
+        prompt,
       message: 'API endpoint is working correctly',
-      timestamp: new Date().toISOString()
-    });
+        timestamp: new Date().toISOString()
+      });
     
   } catch (error) {
     console.error('AI API test failed:', error);

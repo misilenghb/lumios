@@ -23,8 +23,7 @@ const nextConfig: NextConfig = {
   },
   // 开发模式配置
   devIndicators: {
-    buildActivity: false,
-    buildActivityPosition: 'bottom-right',
+    position: 'bottom-right',
   },
   // 减少开发模式下的错误
   webpack: (config, { dev, isServer }) => {

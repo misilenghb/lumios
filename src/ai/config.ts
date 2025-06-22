@@ -133,9 +133,9 @@ export function validateConfig(): { isValid: boolean; errors: string[] } {
 /**
  * 获取特定功能的提供商
  */
-export function getProviderForTask(task: 'imageGeneration' | 'textGeneration' | 'imageAnalysis'): 'pollinations' {
-  // 所有任务都使用Pollinations
-  return 'pollinations';
+export function getProviderForTask(): string {
+  // 简化实现，直接返回默认提供者
+  return 'googleai';
 }
 
 /**
@@ -149,7 +149,7 @@ export function isProviderAvailable(provider: 'pollinations'): boolean {
 /**
  * 获取推荐的提供商（考虑可用性）
  */
-export function getRecommendedProvider(task: 'imageGeneration' | 'textGeneration' | 'imageAnalysis'): 'pollinations' {
+export function getRecommendedProvider(): 'pollinations' {
   // 所有任务都推荐使用Pollinations
   return 'pollinations';
 }
@@ -173,4 +173,9 @@ export function logConfigStatus(): void {
   } else {
     console.log('✅ 配置验证通过');
   }
+}
+
+export async function selectBestProvider(availableProviders: string[]): Promise<string | null> {
+  // 简化实现，直接返回第一个可用提供者
+  return availableProviders.length > 0 ? availableProviders[0] : null;
 }

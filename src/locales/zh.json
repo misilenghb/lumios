@@ -1,4 +1,3 @@
-
 {
   "header": {
     "title": "Luminos灵境",
@@ -169,7 +168,7 @@
         }
       },
       "chakraAssessment": {
-        "sectionTitle": "脉轮评估 (1-5分制, 1=完全不符合, 5=完全符合)",
+        "sectionTitle": "脉轮评估 (滑动条评分, 1=完全不符合, 5=完全符合)",
         "likertScale": {
           "1": "完全不符合",
           "2": "不符合",
@@ -298,7 +297,7 @@
       },
       "crystalHealingTitle": "水晶疗愈",
       "crystalHealingDescription": "这些协同水晶组合旨在为您的整体福祉提供增强支持，融合您独特的能量特征和愿望。",
-      "infoNotAvailable": "根据提供的详细信息，无法生成关于“{{field}}”的信息或该项已跳过。",
+      "infoNotAvailable": "根据提供的详细信息，无法生成关于\"{{field}}\"的信息或该项已跳过。",
       "chakraAnalysisSkipped": "由于脉轮评估答案不完整或已跳过，脉轮分析无法执行。",
       "mbtiLikeTypeSkipped": "由于MBTI评估答案不完整或已跳过，人格类型分析无法执行。"
     },

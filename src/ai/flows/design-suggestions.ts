@@ -13,7 +13,6 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 import { pollinationsService } from '@/ai/pollinations-service';
 import { textModels } from '@/ai/pollinations-config';
 import {
-    DesignSuggestionsInputSchema,
     DesignSuggestionsOutputSchema,
     type DesignSuggestionsInput,
     type DesignSuggestionsOutput

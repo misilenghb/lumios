@@ -14,15 +14,10 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 import { pollinationsService } from '@/ai/pollinations-service';
 import { textModels } from '@/ai/pollinations-config';
 
-const AnalyzeInspirationImageInputSchema = z.object({
-  photoDataUri: z
-    .string()
-    .describe(
-      "A photo for design inspiration, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    ),
-  language: z.enum(['en', 'zh']).optional().describe('The desired language for the AI response (en for English, zh for Chinese). Defaults to English if not provided.')
-});
-export type AnalyzeInspirationImageInput = z.infer<typeof AnalyzeInspirationImageInputSchema>;
+export type AnalyzeInspirationImageInput = {
+  photoDataUri: string;
+  language?: 'en' | 'zh';
+};
 
 const DesignRecommendationDetailsSchema = z.object({
   overallTheme: z.string().describe("The overall theme, mood, or artistic style captured from the image (e.g., 'Romantic Vintage', 'Minimalist Abstract', 'Earthy Bohemian'). Use \\n\\n for paragraphs if needed."),

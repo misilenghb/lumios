@@ -4,7 +4,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -18,15 +18,17 @@ import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { analyzeUserProfile } from "@/ai/flows/user-profile-flow";
-import type { FullQuestionnaireDataInput, UserProfileDataOutput as UserProfileData } from "@/ai/schemas/user-profile-schemas";
-import type { Gender, StepConfig, QuestionnaireFormValues, ChakraQuestionnaireAnswers, MBTILikeAssessmentAnswers as MbtiRawAnswers } from "@/types/questionnaire";
-import { useToast } from "@/hooks/use-toast";
 import { calculateMbtiType, areMbtiAnswersComplete, type MbtiDimensionAnswers } from "@/lib/mbti-utils";
 import { calculateChakraScores, areChakraAnswersComplete } from "@/lib/chakra-utils";
 import { CalendarIcon, User, Palette as PaletteIcon, Activity, TrendingUp, ChevronLeft, ChevronRight, Sparkles as ChakraIconUi, Target as GoalIcon, ListChecks } from "lucide-react";
 import { format, parse, isValid as isValidDate } from 'date-fns';
+import { useToast } from "@/hooks/use-toast";
+import type { FullQuestionnaireDataInput, UserProfileDataOutput as UserProfileData } from "@/ai/schemas/user-profile-schemas";
+import type { Gender, StepConfig, QuestionnaireFormValues, ChakraQuestionnaireAnswers, MBTILikeAssessmentAnswers as MbtiRawAnswers } from "@/types/questionnaire";
 
 // Schemas for individual step validation
 const basicInfoSchema = z.object({
@@ -138,7 +140,7 @@ const PersonalizedQuestionnaire: React.FC<PersonalizedQuestionnaireProps> = ({ s
   const [direction, setDirection] = useState(1);
 
   const defaultChakraAnswers: ChakraQuestionnaireAnswers = chakraKeys.reduce((acc, key) => {
-    acc[key] = Array(4).fill(undefined) as any;
+    acc[key] = Array(4).fill(3) as any;
     return acc;
   }, {} as ChakraQuestionnaireAnswers);
 
@@ -364,21 +366,23 @@ const PersonalizedQuestionnaire: React.FC<PersonalizedQuestionnaireProps> = ({ s
                 <Controller
                   name={fieldName as any}
                   control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={(value) => field.onChange(value ? parseInt(value, 10) : undefined)}
-                      value={field.value !== undefined ? String(field.value) : ""}
-                      className="flex flex-wrap gap-x-4 gap-y-2"
-                    >
-                      {([1, 2, 3, 4, 5] as const).map((val) => (
-                        <div key={val} className="flex items-center space-x-2">
-                          <RadioGroupItem value={String(val)} id={`${fieldName}-${val}`} />
-                          <Label htmlFor={`${fieldName}-${val}`} className="font-normal cursor-pointer text-xs sm:text-sm">
-                            {val} - {t(`energyExplorationPage.questionnaire.chakraAssessment.likertScale.${val}`)}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                  render={({ field: { value, onChange } }) => (
+                    <>
+                      <Slider
+                        id={fieldName}
+                        min={1} max={5} step={1}
+                        value={[typeof value === 'number' ? value : 3]}
+                        onValueChange={(val) => onChange(val[0])}
+                        className="my-4"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>{t("energyExplorationPage.questionnaire.chakraAssessment.likertScale.1")}</span>
+                        <span>{t("energyExplorationPage.questionnaire.chakraAssessment.likertScale.2")}</span>
+                        <span>{t("energyExplorationPage.questionnaire.chakraAssessment.likertScale.3")}</span>
+                        <span>{t("energyExplorationPage.questionnaire.chakraAssessment.likertScale.4")}</span>
+                        <span>{t("energyExplorationPage.questionnaire.chakraAssessment.likertScale.5")}</span>
+                      </div>
+                    </>
                   )}
                 />
                 {errorForField && <p className="text-destructive text-sm mt-2">{t(errorForField.message || "energyExplorationPage.questionnaire.chakraAssessment.validation.answerRequired")}</p>}
@@ -445,7 +449,7 @@ const PersonalizedQuestionnaire: React.FC<PersonalizedQuestionnaireProps> = ({ s
                   <Slider
                     id={slider.name}
                     min={1} max={5} step={1}
-                    defaultValue={[typeof value === 'number' ? value : 3]}
+                    value={[typeof value === 'number' ? value : 3]}
                     onValueChange={(val) => onChange(val[0])}
                     className="my-4"
                   />

@@ -8,11 +8,9 @@ import { textModels } from '@/ai/pollinations-config';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import {
-  DesignSuggestionsInputSchema,
   DesignSuggestionsOutputSchema,
   type DesignSuggestionsInput,
   type DesignSuggestionsOutput,
-  DesignSchemeSchema, // Import the schema for a single design scheme
 } from '@/ai/schemas/design-schemas';
 
 // Enhanced input schema for Pollinations.AI
@@ -38,11 +36,11 @@ export type PollinationsTextOutput = z.infer<typeof PollinationsTextOutputSchema
 export async function generateDesignSuggestionsWithPollinations(
   input: DesignSuggestionsInput
 ): Promise<DesignSuggestionsOutput> {
-  const language = input.language || 'en';
-
+    const language = input.language || 'en';
+    
   // Build a detailed system prompt that mirrors the structure of the genkit prompt.
   // This guides the Pollinations.AI model to return the correct JSON structure.
-  const systemPrompt = `You are an AI-powered design assistant specializing in crystal jewelry designs.
+    const systemPrompt = `You are an AI-powered design assistant specializing in crystal jewelry designs.
 Your goal is to provide detailed, creative, and well-formatted design suggestions in a structured JSON format.
 Adhere strictly to the provided JSON output schema. Ensure all string fields that support multiple paragraphs use "\\n\\n" for paragraph separation. For lists within string fields, use standard bullet points (e.g., "- item").
 
@@ -169,7 +167,16 @@ Based on these preferences, generate 2-3 detailed design schemes. Ensure all tex
  */
 export async function analyzeInspirationWithPollinations(
   input: { photoDescription: string; language?: 'en' | 'zh' }
-): Promise<any> {
+): Promise<{
+  designRecommendations: {
+    overallTheme: string;
+    keyElementsAndShapes: string[];
+    textureAndPatternIdeas: string[];
+    potentialMaterials: string[];
+    narrativeOrSymbolism: string;
+  };
+  colorPalette: string[];
+}> {
   try {
     const language = input.language || 'en';
     
@@ -204,7 +211,7 @@ Please analyze this image description and provide design inspiration recommendat
     // Parse the JSON response
     try {
       return JSON.parse(response);
-    } catch (parseError) {
+    } catch {
       // Fallback response if JSON parsing fails
       return {
         designRecommendations: {
